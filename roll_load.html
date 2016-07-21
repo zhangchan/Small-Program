@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+        <title>roll_load</title>  
+
+  </head> 
+<body>
+<style type="text/css">
+	body{margin: 0;padding: 0;}
+	#scroll{ width: 100%;}
+	#scroll ul{ width: 100%;padding: 0;border-top: 1px solid #ccc; }
+	#scroll ul li{ height: 40px; line-height: 40px; background: #eee; border-bottom: 1px solid #ccc;width: 100%;color: #666;}
+</style>
+<div id="scroll"></div>
+<script type="text/javascript">
+	var scroll = document.getElementById('scroll');
+	var ul = document.createElement('ul');
+	function addli(text){
+		var li = document.createElement('li');
+		var text = document.createTextNode("此为条目" + text);
+		li.appendChild(text);
+		return li;
+	}
+	for(var i =0;i<20;i++){
+		ul.appendChild(addli(i));
+	}
+	scroll.appendChild(ul);
+	// window.onscroll = function (event) {
+	function scrollFun(event) {
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		var scrollHeight = document.body.scrollHeight;
+		var actionHeight = 160;
+		if(scrollHeight - this.innerHeight - scrollTop <= actionHeight){
+			for(var i =0;i<20;i++){
+				ul.appendChild(addli(i));
+			}
+		}
+	}
+	window.addEventListener('scroll',scrollFun);
+</script>
+</body>  
+</html> 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+        <title>pull_refresh</title>  
+  </head> 
+<body>
+<style type="text/css">
+	body{margin: 0;padding: 0;}
+    #top{ width: 100%; height: 40px;position: absolute;top: 0;line-height: 40px;text-align: center;}
+	#scroll{ width: 100%; position: relative;top:0;}
+	#scroll ul{ width: 100%;padding: 0;margin: 0; border-top: 1px solid #ccc; }
+	#scroll ul li{ height: 40px; line-height: 40px; background: #eee; border-bottom: 1px solid #ccc;width: 100%;color: #666;}
+</style>
+<div id="top"></div>
+<div id="scroll"></div>
+<script type="text/javascript">
+	var scroll = document.getElementById('scroll');
+	var html = '';
+	html+= '<ul>';
+	for(var i =0;i<80;i++){
+		html += '<li>此为条目 00' + i + "</li>"; 
+	}
+	html+= '</ul>';
+	scroll.innerHTML = html;
+	scroll.addEventListener('touchstart',touch, false);
+    scroll.addEventListener('touchmove',touch, false);
+    scroll.addEventListener('touchend',touch, false);
+    var posY = null,scrollTop;
+    window.onscroll = function (event) {
+        scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    }
+    function touch (event){
+        var event = event || window.event;
+        var topText = document.getElementById('top');
+        var actionHeight = 60;
+        switch(event.type){
+            case "touchstart":
+                posY = event.touches[0].clientY;
+                break;
+            case "touchend":
+                if(event.changedTouches[0].clientY - posY > actionHeight && !scrollTop){
+                	console.log("释放触发下拉刷新事件");
+                	refersh();
+                }
+                top = null;
+                scroll.style.top = 0;
+                break;
+            case "touchmove":
+                // event.preventDefault();
+                var pullWidth = event.changedTouches[0].clientY - posY;
+                scroll.style.top = pullWidth*2/3 > 80 ? 80 : pullWidth*2/3 + "px";
+                if(pullWidth > actionHeight && !scrollTop){
+                	topText.innerHTML = "释放触刷新页面";
+                }else if(pullWidth <= actionHeight && pullWidth > 0 && !scrollTop){
+                	topText.innerHTML = "继续下拉将刷新";
+                }
+                break;
+        }
+         
+    }
+    function refersh(){
+    	alert("触发下拉刷新事件");
+    }
+</script>
+</body>  
+</html> 
